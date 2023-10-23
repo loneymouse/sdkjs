@@ -12549,6 +12549,7 @@ background-repeat: no-repeat;\
 	asc_docs_api.prototype['asc_GetSelectedText'] = asc_docs_api.prototype.asc_GetSelectedText;
 	asc_docs_api.prototype['asc_AddBlankPage'] = asc_docs_api.prototype.asc_AddBlankPage;
 	asc_docs_api.prototype['asc_EditSelectAll'] = asc_docs_api.prototype.asc_EditSelectAll;
+	asc_docs_api.prototype['asc_DocumentData'] = asc_docs_api.prototype.asc_DocumentData;
 	asc_docs_api.prototype['sendEvent'] = asc_docs_api.prototype.sendEvent;
 	asc_docs_api.prototype['asc_setSkin'] = asc_docs_api.prototype.asc_setSkin;
 
