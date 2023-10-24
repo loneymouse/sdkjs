@@ -204,7 +204,7 @@
                 this.AddLoadFonts("Courier New", 0x0F);
                 this.AddLoadFonts("Times New Roman", 0x0F);
                 this.AddLoadFonts("Cambria Math", 0x0F)
-                this.AddLoadFonts("Microsoft YaHei", 0x0F)
+                // this.AddLoadFonts("Microsoft YaHei", 0x0F)
             }
 
             this.Api.asyncFontsDocumentStartLoaded();
