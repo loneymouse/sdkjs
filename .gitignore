@@ -10,7 +10,6 @@ slide/themes/themes.js
 *~
 .DS_Store
 /deploy
-/develop
 node_modules
 package-lock.json
 */node_modules
