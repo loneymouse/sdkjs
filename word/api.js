@@ -845,7 +845,6 @@
 		this.TableStylesPreviewGenerator = null;
 
 		//g_clipboardBase.Init(this);
-
 		this._init();
 	}
 
@@ -5549,6 +5548,7 @@ background-repeat: no-repeat;\
 
 	asc_docs_api.prototype.asc_addOleObjectAction = function (sLocalUrl, sData, sApplicationId, fWidth, fHeight, nWidthPix, nHeightPix, bSelect, arrImagesForAddToHistory) {
 		var _image = this.ImageLoader.LoadImage(AscCommon.getFullImageSrc2(sLocalUrl), 1);
+		console.log(sLocalUrl, sData, sApplicationId, fWidth, fHeight, nWidthPix, nHeightPix, bSelect, arrImagesForAddToHistory)
 		if (null != _image)//картинка уже должна быть загружена
 		{
 			this.WordControl.m_oLogicDocument.StartAction(AscDFH.historydescription_Document_PasteHotKey);
@@ -5565,6 +5565,7 @@ background-repeat: no-repeat;\
 
 	asc_docs_api.prototype.asc_editOleObjectAction = function (oOleObject, sImageUrl, sData, fWidthMM, fHeightMM, nPixWidth, nPixHeight, arrImagesForAddToHistory) {
 		if (oOleObject) {
+			console.log('editor oldobject', oOleObject, sImageUrl, sData, fWidthMM, fHeightMM, nPixWidth, nPixHeight, arrImagesForAddToHistory)
 			this.WordControl.m_oLogicDocument.StartAction(AscDFH.historydescription_Document_PasteHotKey);
 			this.WordControl.m_oLogicDocument.EditOleObject(oOleObject, sData, sImageUrl, fWidthMM, fHeightMM, nPixWidth, nPixHeight, arrImagesForAddToHistory);
 			this.WordControl.m_oLogicDocument.Recalculate();
@@ -10404,25 +10405,68 @@ background-repeat: no-repeat;\
 			let elcount = parap.GetElementsCount();
 			for (let idex = 0; idex < elcount; idex++) {
 				let el = parap.GetElement(idex)
-				if (el.IsRun() && !el.Is_Empty()) {
-					let outtxt = el.GetText({ "NewLineSeparator": "\r", "TabSymbol": "\t", "Text": '' })
-					nparag.ranges.push(
-						{
-							index: idex,
-							type: 'text',
-							text: outtxt
-						}
-					)
+				const nType = el.Get_Type()
+				if (nType === 38) {
+					let wordinfo = {
+						content: '',
+						type: ''
+					}
+					wordinfo.type = 'latex'
+					wordinfo.content = el.GetText(true);
+					console.log(wordinfo)
+					nparag.ranges.push(wordinfo)
 				}
-				if (el.IsMath() && !el.Is_Empty()) {
-					let outtxt = el.GetText(true)
-					nparag.ranges.push(
-						{
-							index: idex,
-							type: 'math',
-							text: outtxt
-						}
-					)
+				if (nType === 39) {
+					console.log(el)
+					if (el.Content) {
+						el.Content.forEach((item, index) => {
+							let wordinfo = {
+								content: '',
+								type: ''
+							}
+							const ItemType = item.Get_Type()
+							switch (ItemType) {
+								case 0x0016:
+									{
+										wordinfo.type = 'Img'
+										wordinfo.content = item.getBase64Img()
+										nparag.ranges.push(wordinfo)
+										break;
+									}
+								case 0x0001:
+									{
+										wordinfo.type = 'Text'
+										wordinfo.content = String.fromCharCode(item.Value);
+										console.log(wordinfo)
+										nparag.ranges.push(wordinfo)
+										break;
+									}
+								case 0x0002:
+									{
+										wordinfo.type = 'Text'
+										wordinfo.content = ' ';
+										console.log(wordinfo)
+										nparag.ranges.push(wordinfo)
+										break;
+									}
+								case 0x0015:
+									{
+										wordinfo.type = 'Text'
+										wordinfo.content = '	';
+										console.log(wordinfo)
+										nparag.ranges.push(wordinfo)
+										break;
+									}
+								case para_Math_Run: {
+									break;
+								}
+								default:
+									break;
+							}
+
+						})
+					}
+
 				}
 			}
 			rs.push(nparag)
@@ -12548,6 +12592,8 @@ background-repeat: no-repeat;\
 	asc_docs_api.prototype['asc_ReplaceCurrentWord'] = asc_docs_api.prototype.asc_ReplaceCurrentWord;
 	asc_docs_api.prototype['asc_GetSelectedText'] = asc_docs_api.prototype.asc_GetSelectedText;
 	asc_docs_api.prototype['asc_AddBlankPage'] = asc_docs_api.prototype.asc_AddBlankPage;
+	asc_docs_api.prototype['asc_DocumentData'] = asc_docs_api.prototype.asc_DocumentData;
+
 	asc_docs_api.prototype['asc_EditSelectAll'] = asc_docs_api.prototype.asc_EditSelectAll;
 	// asc_docs_api.prototype['asc_DocumentData'] = asc_docs_api.prototype.asc_DocumentData;
 	asc_docs_api.prototype['sendEvent'] = asc_docs_api.prototype.sendEvent;
