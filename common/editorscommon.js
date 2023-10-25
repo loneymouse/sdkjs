@@ -9074,7 +9074,7 @@
 			"MS Mincho",
 			"Batang",
 			"Arial Unicode MS",
-			// "Microsoft JhengHei", "Microsoft YaHei", "SimHei", "DengXian",
+			"Microsoft JhengHei", "Microsoft YaHei", "SimHei", "DengXian",
 			"Meiryo", "MS Gothic", "MS PGothic", "MS UI Gothic", "Yu Gothic",
 			"Dotum", "Gulim", "Malgun Gothic"
 		];
